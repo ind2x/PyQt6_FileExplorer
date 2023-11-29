@@ -34,27 +34,34 @@ class kCheckFileExtension(object):
         # 홈 버튼
         self.Btn_home = QtWidgets.QPushButton(parent=self.centralwidget)
         self.Btn_home.setObjectName("Btn_home")
+        self.Btn_home.setStyleSheet("background-color: rgb(85, 170, 255);")
         self.horizontalLayout_2.addWidget(self.Btn_home)
 
         # 닫기 버튼
         self.Btn_close = QtWidgets.QPushButton(parent=self.centralwidget)
         self.Btn_close.setObjectName("Btn_close")
+        self.Btn_close.setStyleSheet("background-color: rgb(85, 170, 255);")
         self.horizontalLayout_2.addWidget(self.Btn_close)
 
         # 폴더 선택
         self.Btn_SetDirectoryPath = QtWidgets.QPushButton(parent=self.centralwidget)
         self.Btn_SetDirectoryPath.setObjectName("Btn_SetDirectoryPath")
+        self.Btn_SetDirectoryPath.setStyleSheet(
+            "background-color: rgb(85, 170, 255);")
         self.horizontalLayout_2.addWidget(self.Btn_SetDirectoryPath)
 
         # 확장자 검사 버튼
         self.Btn_checkExtension = QtWidgets.QPushButton(
             parent=self.centralwidget)
         self.Btn_checkExtension.setObjectName("Btn_checkExtension")
+        self.Btn_checkExtension.setStyleSheet(
+            "background-color: rgb(85, 170, 255);")
         self.horizontalLayout_2.addWidget(self.Btn_checkExtension)
 
         # 새로고침 버튼
         self.Btn_refresh = QtWidgets.QPushButton(parent=self.centralwidget)
         self.Btn_refresh.setObjectName("Btn_refresh")
+        self.Btn_refresh.setStyleSheet("background-color: rgb(85, 170, 255);")
         self.horizontalLayout_2.addWidget(self.Btn_refresh)
 
         # 수평 레이아웃을 수직 레이아웃에 추가
@@ -112,6 +119,9 @@ class kCheckFileExtension(object):
             QtCore.QRect(0, 0, 816, 482))
         self.scrollAreaWidgetContents_2.setObjectName(
             "scrollAreaWidgetContents_2")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(
+            self.scrollAreaWidgetContents_2)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
 
         # 테이블 위젯
         self.tableWidget = QtWidgets.QTableWidget(
@@ -138,7 +148,9 @@ class kCheckFileExtension(object):
         header = self.tableWidget.horizontalHeader()
 
         # 폴더 선택 후 출력
-        self.setDirectoryPath()
+        self.setDirectoryPath(MainWindow)
+
+        self.horizontalLayout_3.addWidget(self.tableWidget)
 
         # 스크롤 가능한 영역의 내용 위젯 설정
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
@@ -175,6 +187,33 @@ class kCheckFileExtension(object):
         # 콤보 박스 선택에 따라 테이블 필터링
         self.comboBox.currentIndexChanged.connect(self.filter_table)
 
+    # table 설정
+    def showTable(self):
+        # 테이블 초기화
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+
+        if file_manager.directory_path == '':
+            pass
+        else:
+            # 데이터를 테이블에 추가
+            files_info = file_manager.list_files_in_directory()
+            for row_idx, row_data in enumerate(files_info):
+                path = os.path.join(row_data["file_path"], row_data["file_name"])
+                isfile = os.path.isfile(path)
+                
+                if isfile:
+                    row_idx = self.tableWidget.rowCount()
+                    self.tableWidget.insertRow(row_idx)  # 행 추가
+                    
+                    for col_idx, key in enumerate(["file_name", "file_path", "extension", "file_size"]):
+                        item = QtWidgets.QTableWidgetItem(str(row_data[key]))
+                        item.setFlags(
+                            item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
+                        item.setFlags(
+                            item.flags() & ~QtCore.Qt.ItemFlag.ItemIsDropEnabled)
+                        self.tableWidget.setItem(row_idx, col_idx, item)
+
     # 버튼에 대한 동작수행 함수 정의
     def goHome(self):
         # 메인 화면으로 이동
@@ -185,17 +224,23 @@ class kCheckFileExtension(object):
         # 파일 종료
         sys.exit(0)
 
-    
-    def setDirectoryPath(self):
+    def setDirectoryPath(self, Mainwindow):
         # 폴더 경로 설정
         # 사용자에게 디렉토리 선택 대화상자 표시
         self.directory = QtWidgets.QFileDialog.getExistingDirectory(
-            MainWindow, "디렉토리 선택", os.getcwd())
+            None, "디렉토리 선택", os.getcwd())
 
+        # 파일 경로를 넘겨받으면 해당 경로에 있는 목록 출력
+        file_manager.setDirPath(self.directory)
+
+        self.showTable()
+        
+        '''
         if self.directory == '':
             pass
         else:
             # 파일 목록 초기화
+            self.tableWidget.clearContents()
             self.tableWidget.setRowCount(0)
 
             # 선택한 디렉토리의 파일 목록 탐색
@@ -217,7 +262,7 @@ class kCheckFileExtension(object):
                     for col, value in enumerate(file_info.values()):
                         item = QtWidgets.QTableWidgetItem(str(value))
                         self.tableWidget.setItem(row_position, col, item)
-        
+        '''
         
     def check_extension(self):
         # 파일 확장자 검사
@@ -227,24 +272,14 @@ class kCheckFileExtension(object):
         # 현재 디렉토리의 파일 목록을 다시 가져와서 테이블에 표시
         file_manager.setDirPath(self.directory)
 
-        # 테이블 초기화
-        self.tableWidget.clearContents()
-        self.tableWidget.setRowCount(0)
+        self.showTable()
 
-        if file_manager.directory_path == '':
-            pass
-        else:
-            # 데이터를 테이블에 추가
-            files_info = file_manager.list_files_in_directory()
-            for row_idx, row_data in enumerate(files_info):
-                self.tableWidget.insertRow(row_idx)  # 행 추가
-                for col_idx, key in enumerate(["file_name", "file_path", "file_size", "modified_time"]):
-                    item = QtWidgets.QTableWidgetItem(str(row_data[key]))
-                    item.setFlags(
-                        item.flags() & ~QtCore.Qt.ItemFlag.ItemIsEditable)
-                    item.setFlags(
-                        item.flags() & ~QtCore.Qt.ItemFlag.ItemIsDropEnabled)
-                    self.tableWidget.setItem(row_idx, col_idx, item)
+        # 새로고침 시 화면이 빠르게 꺼졌다 켜지는 것 같은 이펙트 대신에 statusBar에 문구 출력
+        # 문구 출력 후 1초 후에 timeout 시그널이 발생하면 statusBar에 있는 문구를 지움
+        self.statusbar.showMessage("Status: 새로고침")
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.statusbar.clearMessage)
+        self.timer.start(1000)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -277,17 +312,26 @@ class kCheckFileExtension(object):
         selected_option = self.comboBox.currentText()
 
         for row_idx in range(self.tableWidget.rowCount()):
-            item = self.tableWidget.item(row_idx, 2)  # "사이즈" 열에 해당하는 아이템
+            # "사이즈" 열에 해당하는 아이템
+            item = self.tableWidget.item(row_idx, 2)
+
             if item is not None:
-                item_path = self.tableWidget.item(
-                    row_idx, 1).text()  # "경로" 열에 해당하는 아이템
+                # 파일명, 파일 경로 추출
+                file_name = self.tableWidget.item(row_idx, 0).text()
+                file_path = self.tableWidget.item(row_idx, 1).text()
+
+                item_path = os.path.join(file_path, file_name)
                 _, file_extension = os.path.splitext(item_path)  # 확장자 추출
 
                 if selected_option == "전체":
                     self.tableWidget.setRowHidden(row_idx, False)
+                elif selected_option == "폴더" and os.path.isdir(item_path):
+                    self.tableWidget.setRowHidden(row_idx, False)
                 elif selected_option == "실행파일" and file_extension.lower() in {'.exe', '.bat', '.cmd', '.msi', '.sh', '.dll', '.ps1', '.com', '.jar', '.vbs'}:
                     self.tableWidget.setRowHidden(row_idx, False)
                 elif selected_option == "문서" and file_extension.lower() in {'.txt', '.doc', '.docx', '.pdf', '.xml', '.docx', '.hwp', '.hwpx', '.py', '.c', '.cpp', '.java', '.ppt', '.html', '.css', '.js', '.md'}:
+                    self.tableWidget.setRowHidden(row_idx, False)
+                elif selected_option == "사진" and file_extension.lower() in {'.jpg', '.jpeg', '.png', '.gif', '.ico', '.WMF', '.bmp'}:
                     self.tableWidget.setRowHidden(row_idx, False)
                 else:
                     self.tableWidget.setRowHidden(row_idx, True)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>836</width>
-    <height>585</height>
+    <width>922</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -117,64 +117,60 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>816</width>
-         <height>482</height>
+         <width>1218</width>
+         <height>1218</height>
         </rect>
        </property>
-       <widget class="QTableWidget" name="tableWidget">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>1200</width>
-          <height>1200</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>1200</width>
-          <height>1200</height>
-         </size>
-        </property>
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="mouseTracking">
-         <bool>false</bool>
-        </property>
-        <column>
-         <property name="text">
-          <string>이름</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>경로</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>사이즈</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>수정한 날짜</string>
-         </property>
-        </column>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>1200</width>
+            <height>1200</height>
+           </size>
+          </property>
+          <property name="sizeIncrement">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>이름</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>경로</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>사이즈</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>수정한 날짜</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

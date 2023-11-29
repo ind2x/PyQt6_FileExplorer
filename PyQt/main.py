@@ -105,7 +105,7 @@ class MainHome(object):
         self.FileExplorer_form = None
 
         # 확장자검사 버튼에 연결할 함수 지정
-        #self.Btn_CheckFileExtension.clicked.connect(self.openCheckFileExtension)
+        self.Btn_CheckFileExtension.clicked.connect(self.openCheckFileExtension)
         self.CheckFileExtension_form = None
 
         # 바이러스검사 버튼에 연결할 함수 지정
@@ -117,6 +117,10 @@ class MainHome(object):
         self.FileExplorer_form = QtWidgets.QMainWindow()
         ui_file_explorer = kFileExplorer()
         ui_file_explorer.setupUi(self.FileExplorer_form)
+        ui_file_explorer.parent = self.FileExplorer_form  # 부모 창 설정
+
+        # 메인 홈으로 이동하는 버튼 클릭 시의 동작 정의
+        ui_file_explorer.Btn_home.clicked.connect(self.FileExplorer_form.close)
         self.FileExplorer_form.show()
 
     def openCheckFileExtension(self):

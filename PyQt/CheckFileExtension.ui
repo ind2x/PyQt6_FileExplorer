@@ -22,6 +22,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QPushButton" name="Btn_home">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 170, 255);</string>
+        </property>
         <property name="text">
          <string>메인 홈으로 이동</string>
         </property>
@@ -29,6 +32,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="Btn_close">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 170, 255);</string>
+        </property>
         <property name="text">
          <string>닫기</string>
         </property>
@@ -36,6 +42,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="Btn_checkExtension">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 170, 255);</string>
+        </property>
         <property name="text">
          <string>숨겨진 확장자 검사</string>
         </property>
@@ -43,6 +52,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="Btn_refresh">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(85, 170, 255);</string>
+        </property>
         <property name="text">
          <string>새로고침(F5)</string>
         </property>
