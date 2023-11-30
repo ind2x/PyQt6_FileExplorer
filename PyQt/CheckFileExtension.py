@@ -147,8 +147,11 @@ class kCheckFileExtension(object):
             ["이름", "경로", "확장자", "파일 크기"])
         header = self.tableWidget.horizontalHeader()
 
+        # 더블 클릭 시 파일/폴더 열기
+        self.tableWidget.itemDoubleClicked.connect(self.double_clicked)
+
         # 폴더 선택 후 출력
-        self.setDirectoryPath(MainWindow)
+        self.setDirectoryPath()
 
         self.horizontalLayout_3.addWidget(self.tableWidget)
 
@@ -187,6 +190,26 @@ class kCheckFileExtension(object):
         # 콤보 박스 선택에 따라 테이블 필터링
         self.comboBox.currentIndexChanged.connect(self.filter_table)
 
+    # 더블 클릭 시 이벤트 함수
+    def double_clicked(self, item):
+        # 윈도우 파일탐색기로 선택된 파일 혹은 폴더 열기
+        selected_row = item.row()
+
+        # 현재 파일 이름 및 경로 가져오기
+        current_file_name = self.tableWidget.item(selected_row, 0).text()
+        current_file_path = self.tableWidget.item(selected_row, 1).text()
+        name = os.path.join(current_file_path, current_file_name)
+
+        try:
+            if os.path.isdir(name):
+                # subprocess.run(['explorer', '', name], shell=True)
+                os.startfile(name)
+            else:
+                subprocess.run(['start', '', name], shell=True)
+        except Exception as e:
+            QtWidgets.QMessageBox.warning(
+                self.centralwidget, "에러", f"파일 혹은 폴더가 없습니다.\n에러 메시지: {str(e)}", QtWidgets.QMessageBox.StandardButton.Ok)
+
     # table 설정
     def showTable(self):
         # 테이블 초기화
@@ -224,7 +247,7 @@ class kCheckFileExtension(object):
         # 파일 종료
         sys.exit(0)
 
-    def setDirectoryPath(self, Mainwindow):
+    def setDirectoryPath(self):
         # 폴더 경로 설정
         # 사용자에게 디렉토리 선택 대화상자 표시
         self.directory = QtWidgets.QFileDialog.getExistingDirectory(

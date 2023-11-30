@@ -3,6 +3,7 @@ import sys
 from FileExplorer import kFileExplorer
 from CheckFileExtension import kCheckFileExtension
 
+
 class MainHome(object):
     def setupUi(self, Form):
         # 메인 폼의 속성 설정
@@ -105,11 +106,12 @@ class MainHome(object):
         self.FileExplorer_form = None
 
         # 확장자검사 버튼에 연결할 함수 지정
-        self.Btn_CheckFileExtension.clicked.connect(self.openCheckFileExtension)
+        self.Btn_CheckFileExtension.clicked.connect(
+            self.openCheckFileExtension)
         self.CheckFileExtension_form = None
 
         # 바이러스검사 버튼에 연결할 함수 지정
-        #self.Btn_VirusCheck.clicked.connect(self.openVirusCheck)
+        # self.Btn_VirusCheck.clicked.connect(self.openVirusCheck)
         self.VirusCheck_form = None
 
     def openFileExplorer(self):
@@ -129,7 +131,7 @@ class MainHome(object):
         ui_check_file_extension = kCheckFileExtension()
         ui_check_file_extension.setupUi(self.CheckFileExtension_form)
         self.CheckFileExtension_form.show()
-    
+
     '''
     def openVirusCheck(self):
         # 바이러스검사 버튼 클릭 시 실행되는 함수

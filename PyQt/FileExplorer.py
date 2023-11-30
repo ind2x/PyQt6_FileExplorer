@@ -1,12 +1,13 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 import sys
 import os
+import subprocess
 from MyFileManager import FileManager
 
 file_manager = FileManager()
 
 
-class kFileExplorer(object):
+class kFileExplorer(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
         # 디렉터리 경로 저장
         self.directory = ''
@@ -152,9 +153,12 @@ class kFileExplorer(object):
             ["이름", "경로", "사이즈", "수정한 날짜"])
         header = self.tableWidget.horizontalHeader()
 
+        # 더블 클릭 시 파일/폴더 열기
+        self.tableWidget.itemDoubleClicked.connect(self.double_clicked)
+
         # 파일 경로를 넘겨받으면 해당 경로에 있는 목록 출력
         # 사용자에게 디렉토리 선택 대화상자 표시
-        self.setDirectoryPath(MainWindow)
+        self.setDirectoryPath()
 
         self.horizontalLayout_3.addWidget(self.tableWidget)
 
@@ -205,6 +209,26 @@ class kFileExplorer(object):
         # 콤보 박스 선택에 따라 테이블 필터링
         self.comboBox.currentIndexChanged.connect(self.filter_table)
 
+    # 더블 클릭 시 이벤트 함수
+    def double_clicked(self, item):
+        # 윈도우 파일탐색기로 선택된 파일 혹은 폴더 열기
+        selected_row = item.row()
+
+        # 현재 파일 이름 및 경로 가져오기
+        current_file_name = self.tableWidget.item(selected_row, 0).text()
+        current_file_path = self.tableWidget.item(selected_row, 1).text()
+        name = os.path.join(current_file_path, current_file_name)
+
+        try:
+            if os.path.isdir(name):
+                #subprocess.run(['explorer', '', name], shell=True)
+                os.startfile(name)
+            else:
+                subprocess.run(['start', '', name], shell=True)
+        except Exception as e:
+            QtWidgets.QMessageBox.warning(
+                self.centralwidget, "에러", f"파일 혹은 폴더가 없습니다.\n에러 메시지: {str(e)}", QtWidgets.QMessageBox.StandardButton.Ok)
+
     # table 설정
     def showTable(self):
         # 테이블 초기화
@@ -237,7 +261,7 @@ class kFileExplorer(object):
         # 파일 종료
         sys.exit(0)
 
-    def setDirectoryPath(self, MainWindow):
+    def setDirectoryPath(self):
         # 폴더 선택
         # 사용자에게 디렉토리 선택 대화상자 표시
         self.directory = QtWidgets.QFileDialog.getExistingDirectory(None, "디렉토리 선택", os.getcwd())
@@ -373,3 +397,13 @@ class kFileExplorer(object):
                     self.tableWidget.setRowHidden(row_idx, False)
                 else:
                     self.tableWidget.setRowHidden(row_idx, True)
+
+
+# 메인 프로그램 실행 부분
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = kFileExplorer()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec())
