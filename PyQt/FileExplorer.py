@@ -6,7 +6,6 @@ from MyFileManager import FileManager
 
 file_manager = FileManager()
 
-
 class kFileExplorer(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
         # 디렉터리 경로 저장
@@ -18,7 +17,7 @@ class kFileExplorer(QtWidgets.QMainWindow):
 
         # 아이콘 설정
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("./image/icon.png"),
+        icon.addPixmap(QtGui.QPixmap("C:\\Users\\nsxz1\\Desktop\\PyQt\\image\\icon.png"),
                        QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
 
@@ -255,7 +254,6 @@ class kFileExplorer(QtWidgets.QMainWindow):
         # 메인 화면으로 이동
         if self.parent is not None and isinstance(self.parent, QtWidgets.QMainWindow):
             self.parent.close()  # 현재 파일 탐색기 창을 닫음
-        pass
 
     def close_window(self):
         # 파일 종료

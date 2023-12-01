@@ -2,7 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 import sys
 from FileExplorer import kFileExplorer
 from CheckFileExtension import kCheckFileExtension
-
+from VirusCheck import kVirusCheck
 
 class MainHome(object):
     def setupUi(self, Form):
@@ -10,7 +10,7 @@ class MainHome(object):
         Form.setObjectName("Form")
         Form.resize(787, 402)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("./image/icon.png"),
+        icon.addPixmap(QtGui.QPixmap("C:\\Users\\nsxz1\\Desktop\\PyQt\\image\\icon.png"),
                        QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         Form.setWindowIcon(icon)
         Form.setStyleSheet("")
@@ -78,7 +78,8 @@ class MainHome(object):
 
         # 이미지가 있는 프레임 생성 및 수직 레이아웃에 추가
         self.frame_2 = QtWidgets.QFrame(parent=self.frame)
-        self.frame_2.setStyleSheet("image: url(./image/title.png);")
+        self.frame_2.setStyleSheet(
+            "image: url('C:/Users/nsxz1/Desktop/PyQt/image/title.png');")
         self.frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -86,7 +87,8 @@ class MainHome(object):
 
         # 이미지가 있는 프레임 생성 및 수직 레이아웃에 추가
         self.frame_3 = QtWidgets.QFrame(parent=self.frame)
-        self.frame_3.setStyleSheet("image: url(./image/main_image.png);")
+        self.frame_3.setStyleSheet(
+            "image: url('C:/Users/nsxz1/Desktop/PyQt/image/main_image.png');")
         self.frame_3.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_3.setObjectName("frame_3")
@@ -106,12 +108,11 @@ class MainHome(object):
         self.FileExplorer_form = None
 
         # 확장자검사 버튼에 연결할 함수 지정
-        self.Btn_CheckFileExtension.clicked.connect(
-            self.openCheckFileExtension)
+        self.Btn_CheckFileExtension.clicked.connect(self.openCheckFileExtension)
         self.CheckFileExtension_form = None
 
         # 바이러스검사 버튼에 연결할 함수 지정
-        # self.Btn_VirusCheck.clicked.connect(self.openVirusCheck)
+        self.Btn_VirusCheck.clicked.connect(self.openVirusCheck)
         self.VirusCheck_form = None
 
     def openFileExplorer(self):
@@ -122,23 +123,59 @@ class MainHome(object):
         ui_file_explorer.parent = self.FileExplorer_form  # 부모 창 설정
 
         # 메인 홈으로 이동하는 버튼 클릭 시의 동작 정의
-        ui_file_explorer.Btn_home.clicked.connect(self.FileExplorer_form.close)
+        ui_file_explorer.Btn_home.clicked.connect(self.closeFileExplorer)
+        
+        # 파일탐색기 열기
         self.FileExplorer_form.show()
+        
+        # 파일탐색기가 열리면 메인화면은 숨기기
+        Form.hide()
+
+    def closeFileExplorer(self):
+        # 파일탐색기를 종료하면 다시 메인화면 보여주기
+        self.FileExplorer_form.close
+        Form.show()
 
     def openCheckFileExtension(self):
         # 확장자검사 버튼 클릭 시 실행되는 함수
         self.CheckFileExtension_form = QtWidgets.QMainWindow()
         ui_check_file_extension = kCheckFileExtension()
         ui_check_file_extension.setupUi(self.CheckFileExtension_form)
-        self.CheckFileExtension_form.show()
+        ui_check_file_extension.parent = self.CheckFileExtension_form
 
-    '''
+        # 메인 홈으로 이동하는 버튼 클릭 시의 동작 정의
+        ui_check_file_extension.Btn_home.clicked.connect(
+            self.closeCheckFileExtension)
+        
+        # 파일탐색기 열기
+        self.CheckFileExtension_form.show()
+        
+        # 파일탐색기가 열리면 메인화면은 숨기기
+        Form.hide()
+    
+    def closeCheckFileExtension(self):
+        self.CheckFileExtension_form.close
+        Form.show()
+
     def openVirusCheck(self):
-        # 바이러스검사 버튼 클릭 시 실행되는 함수
-        virus_check_ui = QtWidgets.QWidget()
-        virus_check_form = loadUi("virus_check.ui", virus_check_ui)
-        virus_check_ui.show()
-    '''
+        # 바이러스 검사 버튼 클릭 시 실행되는 함수
+        self.VirusCheck_form = QtWidgets.QMainWindow()
+        ui_virus_check = kVirusCheck()
+        ui_virus_check.setupUi(self.VirusCheck_form)
+        ui_virus_check.parent = self.VirusCheck_form
+
+        # 메인 홈으로 이동하는 버튼 클릭 시의 동작 정의
+        ui_virus_check.Btn_home.clicked.connect(self.closeVirusCheck)
+        
+        # 파일탐색기 열기
+        self.VirusCheck_form.show()
+        
+        # 파일탐색기가 열리면 메인화면은 숨기기
+        Form.hide()
+    
+    def closeVirusCheck(self):
+        self.VirusCheck_form.close
+        Form.show()
 
     # UI 텍스트를 설정하는 함수
     def retranslateUi(self, Form):
