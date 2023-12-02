@@ -6,6 +6,13 @@ from MyFileManager import FileManager
 
 file_manager = FileManager()
 
+if getattr(sys, 'frozen', False):
+    # PyInstaller로 빌드된 경우
+    script_directory = os.path.dirname(sys.executable) + '\\..'
+else:
+    # 일반적으로 실행되는 경우
+    script_directory = os.path.dirname(os.path.realpath(__file__))
+
 class kFileExplorer(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
         # 디렉터리 경로 저장
@@ -16,8 +23,9 @@ class kFileExplorer(QtWidgets.QMainWindow):
         MainWindow.resize(1023, 598)
 
         # 아이콘 설정
+        icon_path = os.path.join(script_directory, 'image', 'icon.png')
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:\\Users\\nsxz1\\Desktop\\PyQt\\image\\icon.png"),
+        icon.addPixmap(QtGui.QPixmap(icon_path),
                        QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
 
@@ -207,6 +215,8 @@ class kFileExplorer(QtWidgets.QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         # 콤보 박스 선택에 따라 테이블 필터링
         self.comboBox.currentIndexChanged.connect(self.filter_table)
+
+        self.statusbar.showMessage(f"Status: {script_directory}")
 
     # 더블 클릭 시 이벤트 함수
     def double_clicked(self, item):

@@ -3,14 +3,24 @@ import sys
 from FileExplorer import kFileExplorer
 from CheckFileExtension import kCheckFileExtension
 from VirusCheck import kVirusCheck
+import os
+
+if getattr(sys, 'frozen', False):
+    # PyInstaller로 빌드된 경우
+    script_directory = os.path.dirname(sys.executable) + '\\..'
+else:
+    # 일반적으로 실행되는 경우
+    script_directory = os.path.dirname(os.path.realpath(__file__))
 
 class MainHome(object):
     def setupUi(self, Form):
         # 메인 폼의 속성 설정
         Form.setObjectName("Form")
         Form.resize(787, 402)
+        # 현재 스크립트가 위치한 디렉토리
+        icon_path = os.path.join(script_directory, 'image', 'icon.png')
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:\\Users\\nsxz1\\Desktop\\PyQt\\image\\icon.png"),
+        icon.addPixmap(QtGui.QPixmap(icon_path),
                        QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         Form.setWindowIcon(icon)
         Form.setStyleSheet("")
@@ -77,18 +87,20 @@ class MainHome(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
 
         # 이미지가 있는 프레임 생성 및 수직 레이아웃에 추가
+        title_path = os.path.join(
+            script_directory, 'image', 'title.png').replace('\\', '/')
         self.frame_2 = QtWidgets.QFrame(parent=self.frame)
-        self.frame_2.setStyleSheet(
-            "image: url('C:/Users/nsxz1/Desktop/PyQt/image/title.png');")
+        self.frame_2.setStyleSheet(f"image: url('{title_path}');")
         self.frame_2.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_2.setObjectName("frame_2")
         self.verticalLayout_2.addWidget(self.frame_2)
 
         # 이미지가 있는 프레임 생성 및 수직 레이아웃에 추가
+        main_path = os.path.join(
+            script_directory, 'image', 'main_image.png').replace('\\', '/')
         self.frame_3 = QtWidgets.QFrame(parent=self.frame)
-        self.frame_3.setStyleSheet(
-            "image: url('C:/Users/nsxz1/Desktop/PyQt/image/main_image.png');")
+        self.frame_3.setStyleSheet(f"image: url({main_path});")
         self.frame_3.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_3.setObjectName("frame_3")

@@ -6,6 +6,12 @@ import requests
 
 file_manager = FileManager()
 
+if getattr(sys, 'frozen', False):
+    # PyInstaller로 빌드된 경우
+    script_directory = os.path.dirname(sys.executable) + '\\..'
+else:
+    # 일반적으로 실행되는 경우
+    script_directory = os.path.dirname(os.path.realpath(__file__))
 
 class VirusTotalFileAnalyzer:
     def __init__(self, api_key):
@@ -81,8 +87,9 @@ class kVirusCheck(object):
         MainWindow.setStyleSheet("")
 
         # 아이콘 설정
+        icon_path = os.path.join(script_directory, 'image', 'icon.png')
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("C:\\Users\\nsxz1\\Desktop\\PyQt\\image\\icon.png"),
+        icon.addPixmap(QtGui.QPixmap(icon_path),
                        QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
 
