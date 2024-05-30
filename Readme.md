@@ -41,5 +41,4 @@
 <br>
 
 + 바이러스 검사
-
-<br>
+![image](https://github.com/ind2x/gui/assets/52172169/78c681f0-01c9-47ba-999c-8248524ffaf9)
